@@ -30,11 +30,18 @@ function getInformation(){
 
     // console.log(user,name,email,pass,date,salary,position,time);
 
-    var nv = new NhanVien(user,name,email,pass,date,salary,position,time);
+    var nv = new NhanVien(user,name,email,pass,date,Number(salary),position,Number(time));
+    nv.total_salary = nv.count_salary();
+    nv.position = nv.showPosition();
+    nv.rank = nv.classify();
+
     dsnv.addNV(nv);
+    
     showTableNV(dsnv.arrayNV);
+    
     setLocalStorage(dsnv.arrayNV);
-    // console.table(dsnv.arrayNV);
+    
+    console.table(dsnv.arrayNV);
 }
 
 function showTableNV(arrayNV){
@@ -45,13 +52,22 @@ function showTableNV(arrayNV){
             <td>${arrayNV[i].username}</td>
             <td>${arrayNV[i].fullName}</td>
             <td>${arrayNV[i].email}</td>
-            <td>${arrayNV[i].password}</td>
             <td>${arrayNV[i].date_picker}</td>
-            <td>${arrayNV[i].basic_salary}</td>
             <td>${arrayNV[i].position}</td>
-            <td>${arrayNV[i].work_time}</td>
+            <td>${arrayNV[i].total_salary}</td>
+            <td>${arrayNV[i].rank}</td>
+            <td>
+                <button onclick="deleteStaff(${arrayNV[i].username})" class="btn btn-danger">Xóa</button>
+            </td>
+            
         </tr>`;
         content += trNV;
     }
     getELEQuery("#tableDanhSach").innerHTML = content;
+}
+
+function deleteStaff(username){
+    dsnv.delete(username);
+    setLocalStorage(dsnv.arrayNV);
+    showTableNV(dsnv.arrayNV);
 }
