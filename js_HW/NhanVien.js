@@ -16,10 +16,6 @@ function NhanVien(user,name,email,pass,date,salary,position,time){
         var total = condition_salary(this.position,this.basic_salary);
         return total;
     }
-    this.showPosition = function(){
-        var content = showPosition(this.position);
-        return content;
-    }
     this.classify = function(){
         var content = classify(this.work_time);
         return content;
@@ -27,30 +23,16 @@ function NhanVien(user,name,email,pass,date,salary,position,time){
 }
 function condition_salary(position,basic_salary){
     var total_salary = 0;
-    if(position == "Boss"){
+    if(position == "Sếp"){
         total_salary = basic_salary * 3;
     }
-    else if (position == "Manager"){
+    else if (position == "Trưởng phòng"){
         total_salary = basic_salary * 2;
     }
-    else if (position == "Staff"){
+    else if (position == "Nhân viên"){
         total_salary = basic_salary * 1;
     }
     return total_salary;
-}
-
-function showPosition(position){
-    var content = "";
-    if(position == "Boss"){
-        content += "Sếp";
-    }
-    else if (position == "Manager"){
-        content += "Trưởng phòng";
-    }
-    else if (position == "Staff"){
-        content += "Nhân Viên";
-    }
-    return content;
 }
 
 function classify(work_time){

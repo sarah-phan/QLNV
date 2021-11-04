@@ -32,7 +32,6 @@ function getInformation(){
 
     var nv = new NhanVien(user,name,email,pass,date,Number(salary),position,Number(time));
     nv.total_salary = nv.count_salary();
-    nv.position = nv.showPosition();
     nv.rank = nv.classify();
 
     dsnv.addNV(nv);
@@ -40,9 +39,8 @@ function getInformation(){
     showTableNV(dsnv.arrayNV);
     
     setLocalStorage(dsnv.arrayNV);
-    
-    console.table(dsnv.arrayNV);
 }
+console.table(dsnv.arrayNV);
 
 function showTableNV(arrayNV){
     var content = "";
@@ -104,7 +102,6 @@ function update(){
 
     var nv = new NhanVien(user,name,email,pass,date,Number(salary),position,Number(time));
     nv.total_salary = nv.count_salary();
-    nv.position = nv.showPosition();
     nv.rank = nv.classify();
 
     dsnv.updateNV(nv);
