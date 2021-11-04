@@ -13,13 +13,25 @@ function DanhSachNhanVien(){
         });
         return indexNumber;
     }
-    
     this.delete = function(username){
         var index = this.findIndex(username);
         if (index > -1){
             this.arrayNV.splice(index,1);
         }
     }
-
-    
+    this.getInfo = function(username){
+        var index = this.findIndex(username);
+        if (index > -1){
+            return this.arrayNV[index];
+        }
+        else{
+            console.log("Không tìm thấy");
+        }
+    }
+    this.updateNV = function(nv){
+        var index = this.findIndex(nv.username);
+        if (index > -1){
+            this.arrayNV[index] = nv;
+        }
+    }
 }

@@ -58,6 +58,8 @@ function showTableNV(arrayNV){
             <td>${arrayNV[i].rank}</td>
             <td>
                 <button onclick="deleteStaff(${arrayNV[i].username})" class="btn btn-danger">Xóa</button>
+                <br></br>
+                <button onclick="seeInfo(${arrayNV[i].username})" class="btn btn-info" data-toggle="modal" data-target="#myModal">Xem</button>
             </td>
             
         </tr>`;
@@ -68,6 +70,44 @@ function showTableNV(arrayNV){
 
 function deleteStaff(username){
     dsnv.delete(username);
+    setLocalStorage(dsnv.arrayNV);
+    showTableNV(dsnv.arrayNV);
+}
+
+function seeInfo(username){
+    var found = dsnv.getInfo(username);
+    getELEQuery("#tknv").disabled = true;
+    if(found != undefined){
+        getELEQuery("#tknv").value = found.username;
+        getELEQuery("#name").value = found.fullName;
+        getELEQuery("#email").value = found.email;
+        getELEQuery("#password").value = found.password;
+        getELEQuery("#datepicker").value = found.date_picker;
+        getELEQuery("#luongCB").value = found.basic_salary;
+        getELEQuery("#chucvu").value = found.position;
+        getELEQuery("#gioLam").value = found.work_time;
+    }
+    else{
+        console.log("Không tìm thấy");
+    } 
+}
+
+function update(){
+    var user = getELEQuery("#tknv").value;
+    var name = getELEQuery("#name").value;
+    var email = getELEQuery("#email").value;
+    var pass = getELEQuery("#password").value;
+    var date = getELEQuery("#datepicker").value;
+    var salary = getELEQuery("#luongCB").value;
+    var position = getELEQuery("#chucvu").value;
+    var time = getELEQuery("#gioLam").value;
+
+    var nv = new NhanVien(user,name,email,pass,date,Number(salary),position,Number(time));
+    nv.total_salary = nv.count_salary();
+    nv.position = nv.showPosition();
+    nv.rank = nv.classify();
+
+    dsnv.updateNV(nv);
     setLocalStorage(dsnv.arrayNV);
     showTableNV(dsnv.arrayNV);
 }
