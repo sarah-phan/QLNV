@@ -35,3 +35,15 @@ function DanhSachNhanVien(){
         }
     }
 }
+
+DanhSachNhanVien.prototype.searchName = function(key){
+    var arrayKey = [];
+    var key = key.trim().toLowerCase();
+    this.arrayNV.map(function(nv){
+        var rank = nv.rank.toLowerCase();
+        if(rank.indexOf(key) > -1){
+            arrayKey.push(nv);
+        }
+    });
+    return arrayKey;
+}

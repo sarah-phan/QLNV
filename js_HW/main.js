@@ -1,5 +1,6 @@
 // GLOBAL
 var dsnv = new DanhSachNhanVien();
+var validation = new Validation();
 
 function setLocalStorage(arrayNV){
     localStorage.setItem("DSNV", JSON.stringify(arrayNV))
@@ -29,18 +30,36 @@ function getInformation(){
     var time = getELEQuery("#gioLam").value;
 
     // console.log(user,name,email,pass,date,salary,position,time);
-
-    var nv = new NhanVien(user,name,email,pass,date,Number(salary),position,Number(time));
-    nv.total_salary = nv.count_salary();
-    nv.rank = nv.classify();
-
-    dsnv.addNV(nv);
     
-    showTableNV(dsnv.arrayNV);
+    var isValid = true;
+
+    isValid &= validation.checkEmpty(user, "Tài khoản không được để trống", "tbTKNV") && validation.checkUsername(user, "Tài khoản không được trùng", "tbTKNV", dsnv.arrayNV);
+
+    isValid &= validation.checkEmpty(name, "Họ và tên không được để trống", "tbTen") && validation.checkName(name, "Họ và tên phải là kiểu chữ", "tbTen");
+
+    isValid &= validation.checkEmpty(email, "Email không được để trống", "tbEmail") && validation.checkEmail(email, "Email không đúng định dạng", "tbEmail");
     
-    setLocalStorage(dsnv.arrayNV);
+    isValid &= validation.checkEmpty(pass, "Password không được để trống", "tbMatKhau") && validation.checkPassword(pass, "Password phải từ 6-10 ký tự, phải có 1 ký tự số, 1 ký tự viết hoa và 1 ký tự đặc biệt", "tbMatKhau");
+    
+    isValid &= validation.checkEmpty(date, "Ngày làm không được để trống", "tbNgay");
+
+    isValid &= validation.checkEmpty(salary, "Lương cơ bản không được để trống", "tbLuongCB") && validation.checkSalary(salary, "Lương cơ bản phải là số từ 1 000 000 đến 20 000 000", "tbLuongCB");
+
+    isValid &= validation.checkPosition("chucvu", "Chức vụ phải được chọn", "tbChucVu");
+
+    isValid &= validation.checkEmpty(time, "Giờ làm không được để trống", "tbGiolam") && validation.checkTime(time, "Giờ làm phải là số từ 80 đến 200", "tbGiolam");
+    
+    if(isValid){
+        var nv = new NhanVien(user,name,email,pass,date,Number(salary),position,Number(time));
+        nv.total_salary = nv.count_salary();
+        nv.rank = nv.classify();
+    
+        dsnv.addNV(nv);
+        showTableNV(dsnv.arrayNV);
+        setLocalStorage(dsnv.arrayNV);
+    }
 }
-console.table(dsnv.arrayNV);
+// console.table(dsnv.arrayNV);
 
 function showTableNV(arrayNV){
     var content = "";
@@ -100,11 +119,38 @@ function update(){
     var position = getELEQuery("#chucvu").value;
     var time = getELEQuery("#gioLam").value;
 
-    var nv = new NhanVien(user,name,email,pass,date,Number(salary),position,Number(time));
-    nv.total_salary = nv.count_salary();
-    nv.rank = nv.classify();
+    var isValid = true;
 
-    dsnv.updateNV(nv);
-    setLocalStorage(dsnv.arrayNV);
-    showTableNV(dsnv.arrayNV);
+    isValid &= validation.checkEmpty(user, "Tài khoản không được để trống", "tbTKNV");
+
+    isValid &= validation.checkEmpty(name, "Họ và tên không được để trống", "tbTen") && validation.checkName(name, "Họ và tên phải là kiểu chữ", "tbTen");
+
+    isValid &= validation.checkEmpty(email, "Email không được để trống", "tbEmail") && validation.checkEmail(email, "Email không đúng định dạng", "tbEmail");
+    
+    isValid &= validation.checkEmpty(pass, "Password không được để trống", "tbMatKhau") && validation.checkPassword(pass, "Password phải từ 6-10 ký tự, phải có 1 ký tự số, 1 ký tự viết hoa và 1 ký tự đặc biệt", "tbMatKhau");
+    
+    isValid &= validation.checkEmpty(date, "Ngày làm không được để trống", "tbNgay");
+
+    isValid &= validation.checkEmpty(salary, "Lương cơ bản không được để trống", "tbLuongCB") && validation.checkSalary(salary, "Lương cơ bản phải là số từ 1 000 000 đến 20 000 000", "tbLuongCB");
+
+    isValid &= validation.checkPosition("chucvu", "Chức vụ phải được chọn", "tbChucVu");
+
+    isValid &= validation.checkEmpty(time, "Giờ làm không được để trống", "tbGiolam") && validation.checkTime(time, "Giờ làm phải là số từ 80 đến 200", "tbGiolam");
+
+    if(isValid){
+        var nv = new NhanVien(user,name,email,pass,date,Number(salary),position,Number(time));
+        nv.total_salary = nv.count_salary();
+        nv.rank = nv.classify();
+    
+        dsnv.updateNV(nv);
+        setLocalStorage(dsnv.arrayNV);
+        showTableNV(dsnv.arrayNV);
+    }
 }
+
+getELEQuery("#searchName").onkeyup = function(){
+    var key = getELEQuery("#searchName").value;
+    var arrayKey = dsnv.searchName(key);
+    showTableNV(arrayKey);
+}
+
